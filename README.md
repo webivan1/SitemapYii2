@@ -1,5 +1,16 @@
 # Ext Sitemap Yii 2
 
+Install extension
+-----------------
+
+```
+composer require yii2-webivan/yii2-sitemap dev-master
+```
+ 
+Settings
+-------- 
+ 
+
 ```php
 
 <?php
@@ -19,17 +30,17 @@ return [
         // ...
         
         'sitemap' => [
-            'class' => 'common\modules\sitemap\SitemapModule'
+            'class' => 'webivan\sitemap\SitemapModule'
         ]
     ],
     
     'components' => [
         'sitemapComponent' => [
-            'class' => 'common\modules\sitemap\components\SitemapComponent',
-            'domain' => 'https://www.novostroy-m.ru',
+            'class' => 'webivan\sitemap\components\SitemapComponent',
+            'domain' => '%URL_DOMAIN%',
             'staticUrl' => [
                 ['loc' => '/', 'priority' => '1'],
-                ['loc' => '/zakonjy'],
+                ['loc' => '/about'],
                 ['loc' => '/o_proekte'],
                 ['loc' => '/kontaktjy'],
                 ['loc' => '/reklama'],
@@ -46,8 +57,9 @@ return [
                 ['loc' => '/gosipoteka'],
             ],
             'models' => [
+                // @return list urls
                 function (): array {
-                    $models = \common\models\Novos::findAll(['state' => 2]);
+                    $models = \common\models\Pages::findAll(['state' => 2]);
                     $output = [];
 
                     foreach ($models as $model) {

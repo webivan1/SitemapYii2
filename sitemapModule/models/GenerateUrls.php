@@ -6,20 +6,34 @@
  * Time: 12:00
  */
 
-namespace common\modules\sitemap\models;
+namespace webivan\sitemap\models;
 
 use Yii;
 use yii\helpers\Html;
 
 class GenerateUrls
 {
+    /**
+     * @property array
+     */
     private $models;
 
+    /**
+     * Set models
+     *
+     * @param array $models
+     * @return void
+     */
     public function setModels(array $models)
     {
         $this->models = $models;
     }
 
+    /**
+     * Run
+     *
+     * @return \Generator
+     */
     public function run()
     {
         foreach ($this->models as $item)
@@ -37,7 +51,6 @@ class GenerateUrls
                         }
                     }
                 } else {
-                    // @toDo пофиксить
                     Yii::error(Html::errorSummary($container), 'sitemap');
                     continue;
                 }

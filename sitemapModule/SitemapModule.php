@@ -6,7 +6,7 @@
  * Time: 11:24
  */
 
-namespace common\modules\sitemap;
+namespace webivan\sitemap;
 
 use Yii;
 use yii\base\Module;
@@ -14,6 +14,9 @@ use yii\base\BootstrapInterface;
 
 class SitemapModule extends Module implements BootstrapInterface
 {
+    /**
+     * @property string
+     */
     public $defaultSitemapUrl = 'sitemap.xml';
 
     /**
@@ -28,5 +31,12 @@ class SitemapModule extends Module implements BootstrapInterface
                 'route' => $this->id . '/default/index'
             ],
         ], false);
+
+        array_push($app->getLog()->targets, [
+            'class' => 'yii\log\FileTarget',
+            'logFile' => '@app/runtime/logs/sitemap.log',
+            'categories' => ['sitemap'],
+            'logVars' => ['error', 'warning'],
+        ]);
     }
 }

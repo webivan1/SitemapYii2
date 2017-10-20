@@ -6,18 +6,36 @@
  * Time: 15:42
  */
 
-namespace common\modules\sitemap\models;
+namespace webivan\sitemap\models;
 
 use Yii;
 use yii\base\Model;
 
 class ItemUrlConfigure extends Model
 {
+    /**
+     * @property string
+     */
     public $loc;
+
+    /**
+     * @property string date('c')
+     */
     public $lastmod;
+
+    /**
+     * @property string
+     */
     public $changefreq;
+
+    /**
+     * @property string
+     */
     public $priority;
 
+    /**
+     * @inheritdoc
+     */
     public function rules()
     {
         return [

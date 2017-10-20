@@ -6,7 +6,7 @@
  * Time: 11:27
  */
 
-namespace common\modules\sitemap\controllers;
+namespace webivan\sitemap\controllers;
 
 use Yii;
 use yii\base\Controller;
