@@ -1,6 +1,8 @@
 {
     "name": "yii2/sitemap",
     "description": "Extension sitemap Yii2",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Ivan Maltsev",
