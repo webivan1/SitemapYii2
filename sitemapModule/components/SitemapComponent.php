@@ -86,15 +86,15 @@ class SitemapComponent extends Component
 
         if (strpos($this->pathSitemapFiles, '@') === 0) {
             $this->pathSitemapFiles = Yii::getAlias($this->pathSitemapFiles);
+        }
 
-            try {
-                if (!is_dir($this->pathSitemapFiles)) {
-                    mkdir($this->pathSitemapFiles, 0777);
-                    chmod($this->pathSitemapFiles, 0777);
-                }
-            } catch (\Exception $e) {
-                throw $e;
+        try {
+            if (!is_dir($this->pathSitemapFiles)) {
+                mkdir($this->pathSitemapFiles, 0777);
+                chmod($this->pathSitemapFiles, 0777);
             }
+        } catch (\Exception $e) {
+            throw new \yii\base\Exception('Create path: ' . $this->pathSitemapFiles);
         }
     }
 
