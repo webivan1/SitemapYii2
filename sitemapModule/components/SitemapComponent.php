@@ -104,7 +104,7 @@ class SitemapComponent extends Component
      * @param \Closure $handler
      * @return bool
      */
-    public function isTimeoutOrCall(\Closure $handler)
+    public function hasCacheOrCall(\Closure $handler)
     {
         $cacheComponent = Yii::$app->getCache();
         $keyCache = $this->cacheNameKey;
