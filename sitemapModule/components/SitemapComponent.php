@@ -38,11 +38,6 @@ class SitemapComponent extends Component
     public $maxMapRecords = 50000;
 
     /**
-     * @property string
-     */
-    public $runtimePath = '@app/runtime';
-
-    /**
      * @property array
      */
     public $models;
@@ -76,6 +71,11 @@ class SitemapComponent extends Component
      * @property string
      */
     public $cacheNameKey = 'SitemapKeyCache';
+
+    /**
+     * @property bool
+     */
+    public $generateSitemapsByUrl = true;
 
     /**
      * @inheritdoc

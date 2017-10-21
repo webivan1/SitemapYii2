@@ -1,15 +1,22 @@
 # Ext Sitemap Yii 2
 
-Install extension
------------------
+Установка
+---------
 
 ```
-composer require yii2-webivan/yii2-sitemap dev-master
+composer require yii2-webivan/yii2-sitemap
+```
+Или 
+```
+"require": {
+    "yii2-webivan/yii2-sitemap": "dev-master"
+}
 ```
  
-Settings
--------- 
+Настройка
+---------
  
+Конфиг `web.php`
 
 ```php
 
@@ -30,75 +37,88 @@ return [
         // ...
         
         'sitemap' => [
-            'class' => 'webivan\sitemap\SitemapModule'
+            'class' => 'webivan\sitemap\SitemapModule',
+            
+            // get action /sitemap.xml
+            'defaultSitemapUrl' => 'sitemap.xml',
+            
+            // Куда сохраняем логи
+            'runtimePath' => '@app/runtime/logs/sitemap.log'
         ]
     ],
     
     'components' => [
         'sitemapComponent' => [
             'class' => 'webivan\sitemap\components\SitemapComponent',
-            'domain' => '%URL_DOMAIN%',
+            
+            // Отключаем генерацию sitemap при
+            // открытии ссылки /sitemap.xml
+            'generateSitemapsByUrl' => false,
+            
+            // Если у нас генерируются файлы через урл,
+            // то кэшируем их
+            'timeLive' => 3600 * 24 * 5,
+            
+            // Ключ для кэширования
+            'cacheNameKey' => 'SitemapKeyCache',
+            
+            // Приоритет страниц подефолту,
+            // можно убрать поставив значение null
+            'defaultPriority' => '0.7',
+            
+            // Домен который будет в sitemap.xml
+            // например http://moovie.pro
+            'domain' => 'http://moovie.pro',
+            
+            // Указывая путь для sitemap файлов,
+            // создайте предварительно все папки с правами
+            // для записи и чтения
+            'pathSitemapFiles' => '@webroot/sitemaps',
+            
+            // Статические урлы
             'staticUrl' => [
                 ['loc' => '/', 'priority' => '1'],
                 ['loc' => '/about'],
-                ['loc' => '/o_proekte'],
-                ['loc' => '/kontaktjy'],
-                ['loc' => '/reklama'],
-                ['loc' => '/moskva'],
-                ['loc' => '/vse_spetspredlogenia'],
-                ['loc' => '/spetspredlogenia_v_moskve'],
-                ['loc' => '/vse_novostroyki_moskvy_i'],
-                ['loc' => '/skidki_na_kvartiry'],
-                ['loc' => '/deshevye_novostroyki_moskvy'],
-                ['loc' => '/novostrojki_v_podmoskove'],
-                ['loc' => '/po_rajonam'],
-                ['loc' => '/po_gorodam'],
-                ['loc' => '/po_metro'],
-                ['loc' => '/gosipoteka'],
             ],
+            
+            // Конфигурация
             'models' => [
-                // @return list urls
+                // Вы можете описать функицю которая будет возвращать
+                // список урлов
                 function (): array {
                     $models = \common\models\Pages::findAll(['state' => 2]);
                     $output = [];
 
                     foreach ($models as $model) {
                         $output[] = [
-                            'loc' => "/baza/{$model->alias}",
+                            'loc' => "/{$model->alias}",
                             'changefreq' => 'daily'
                         ];
                     }
 
                     return $output;
                 },
+                // Вы можете указать конфиг параметров для авто генерации урлов
+                // Если данных много то рекомендую использовать этот способ
                 [
-                    'model' => 'common\models\Novos',
-                    'select' => 'alias',
+                    'model' => 'common\models\Product',
+                    'select' => 'id, alias',
                     'where' => 'state = 2',
                     'urls' => [
-                        ['loc' => '/baza/{alias}', 'changefreq' => 'daily'],
-                        ['loc' => '/kvartiry/novostroyka/{alias}', 'changefreq' => 'daily'],
-                        ['loc' => '/baza/{alias}/planirovki', 'changefreq' => 'daily'],
-                        ['loc' => '/baza/{alias}/ipoteka', 'changefreq' => 'daily'],
-                        ['loc' => '/carparking/novostroyka/{alias}', 'changefreq' => 'daily'],
-                        ['loc' => '/baza/{alias}/akcii', 'changefreq' => 'daily'],
-                        ['loc' => '/baza/{alias}/infrastruktura', 'changefreq' => 'daily'],
-                        ['loc' => '/baza/{alias}/otzyvy', 'changefreq' => 'daily'],
+                        ['loc' => '/products/{alias}', 'changefreq' => 'daily'],
+                        ['loc' => '/product/detail/{id}', 'changefreq' => 'daily'],
                     ],
+                    // динамические урлы
                     'appendUrls' => function () {
+                        $tags = Yii::$app->params['tags'];
+    
                         return array_map(function ($append) {
-                            return ['loc' => '/kvartiry/novostroyka/{alias}/' . $append];
-                        }, array_keys(Yii::$app->params['aliasesUrlParam']));
+                            return ['loc' => "/tags/{$append}/{alias}"];
+                        }, $tags);
                     }
                 ],
-                [
-                    'model' => 'common\models\Ads',
-                    'select' => 'alias',
-                    'where' => 'state = 2',
-                    'urls' => [
-                        ['loc' => '/kvartiry/{alias}', 'changefreq' => 'daily'],
-                    ]
-                ]
+                
+                // ...
             ]
         ]
     ]
@@ -106,3 +126,33 @@ return [
 ];
 
 ```
+
+Генерация файлов через консоль
+------------------------------
+
+Создайте контроллер для консольных комманд, например
+
+```php 
+<?php 
+
+namespace app\commands;
+
+use yii\console\Controller;
+
+class SitemapController extends Controller
+{
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        return [
+            'index' => [
+                'class' => 'webivan\sitemap\actions\ActionSitemap'
+            ]
+        ];
+    }
+}
+```
+
+и запускайте: `php yii sitemap/index`
