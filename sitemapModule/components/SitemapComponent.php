@@ -6,7 +6,7 @@
  * Time: 11:28
  */
 
-namespace webivan\sitemap;
+namespace webivan\sitemap\components;
 
 use Yii;
 use yii\base\Component;
@@ -73,6 +73,11 @@ class SitemapComponent extends Component
     public $defaultPriority = '0.7';
 
     /**
+     * @property string
+     */
+    public $cacheNameKey = 'SitemapKeyCache';
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -81,24 +86,37 @@ class SitemapComponent extends Component
 
         if (strpos($this->pathSitemapFiles, '@') === 0) {
             $this->pathSitemapFiles = Yii::getAlias($this->pathSitemapFiles);
+
+            try {
+                if (!is_dir($this->pathSitemapFiles)) {
+                    mkdir($this->pathSitemapFiles, 0777);
+                    chmod($this->pathSitemapFiles, 0777);
+                }
+            } catch (\Exception $e) {
+                throw $e;
+            }
         }
     }
 
     /**
-     * Is cache
+     * Is cache or call function
      *
+     * @param \Closure $handler
      * @return bool
      */
-    public function isTimeout()
+    public function isTimeoutOrCall(\Closure $handler)
     {
         $cacheComponent = Yii::$app->getCache();
-        $keyCache = 'SitemapKeyCache';
+        $keyCache = $this->cacheNameKey;
 
         if ($cacheComponent) {
             if ($cacheComponent->exists($keyCache)) {
                 return false;
             } else {
-                $cacheComponent->set($keyCache, 'ok', $this->timeLive);
+                if (call_user_func($handler)) {
+                    $cacheComponent->set($keyCache, 'ok', $this->timeLive);
+                }
+
                 return true;
             }
         } else {
@@ -109,31 +127,39 @@ class SitemapComponent extends Component
     /**
      * Create sitemap files
      *
-     * @return void
+     * @return bool
      */
     public function createSitemaps()
     {
-        $xmlModel = new XmlGenerate();
+        try {
+            $xmlModel = new XmlGenerate();
 
-        // default url
-        $xmlModel->appendTo(
-            ItemConfigure::createObjectUrls($this->staticUrl)
-        );
+            // default url
+            $xmlModel->appendTo(
+                ItemConfigure::createObjectUrls($this->staticUrl)
+            );
 
-        if (!empty($this->models)) {
-            $models = new GenerateUrls();
-            $models->setModels($this->models);
+            if (!empty($this->models)) {
+                $models = new GenerateUrls();
+                $models->setModels($this->models);
 
-            $result = $models->run();
+                $result = $models->run();
 
-            if ($result->valid()) {
-                foreach ($result as $urls) {
-                    $xmlModel->appendTo($urls);
+                if ($result->valid()) {
+                    foreach ($result as $urls) {
+                        $xmlModel->appendTo($urls);
+                    }
                 }
             }
-        }
 
-        $xmlModel->createFile();
+            $xmlModel->createFile();
+
+            return true;
+
+        } catch (\Exception $e) {
+            Yii::error($e->getMessage(), 'sitemap');
+            return false;
+        }
     }
 
     /**
