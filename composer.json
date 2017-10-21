@@ -1,8 +1,8 @@
 {
-    "name": "yii2/sitemap",
+    "name": "yii2-webivan1/yii2-sitemap",
     "description": "Extension sitemap Yii2",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "keywords": ["yii2", "extension"],
+    "type": "yii2-extension",
     "authors": [
         {
             "name": "Ivan Maltsev",
@@ -11,7 +11,7 @@
     ],
     "require": {
         "yiisoft/yii2": "*",
-        "yii2-webivan/yii2-sitemap": "dev-master"
+        "yii2-webivan1/yii2-sitemap": "dev-master"
     },
     "autoload": {
         "psr-4": {
