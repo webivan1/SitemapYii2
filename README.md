@@ -1,15 +1,20 @@
 # Ext Sitemap Yii 2
 
+Требования
+----------
+
+Class PHP: `XMLWriter`
+
 Установка
 ---------
 
 ```
-composer require yii2-webivan/yii2-sitemap
+composer require yii2-webivan1/yii2-sitemap
 ```
 Или 
 ```
 "require": {
-    "yii2-webivan/yii2-sitemap": "dev-master"
+    "yii2-webivan1/yii2-sitemap": "dev-master"
 }
 ```
  
@@ -129,6 +134,21 @@ return [
 
 Генерация файлов через консоль
 ------------------------------
+
+`В консольном конфиге определите алиас @webroot
+если используете путь подефолту`
+
+Например:
+
+```php 
+<?php
+
+return [
+    'aliases' => [
+        '@webroot' => realpath(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'www')
+    ],
+];
+```
 
 Создайте контроллер для консольных комманд, например
 
