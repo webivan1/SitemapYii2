@@ -41,7 +41,10 @@ class ItemUrlConfigure extends Model
         return [
             [['loc'], 'required'],
             [['loc', 'lastmod', 'changefreq', 'priority'], 'string'],
-            [['lastmod'], 'date']
+            ['lastmod', 'filter', 'filter' => function ($value) {
+                return date('c', strtotime($value));
+            }],
+            ['lastmod', 'date']
         ];
     }
 }
