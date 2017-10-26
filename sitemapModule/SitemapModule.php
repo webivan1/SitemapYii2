@@ -20,11 +20,6 @@ class SitemapModule extends Module implements BootstrapInterface
     public $defaultSitemapUrl = 'sitemap.xml';
 
     /**
-     * @property string
-     */
-    public $runtimePath = '@app/runtime/logs/sitemap.log';
-
-    /**
      * @inheritdoc
      */
     public function bootstrap($app)
@@ -36,12 +31,5 @@ class SitemapModule extends Module implements BootstrapInterface
                 'route' => $this->id . '/default/index'
             ],
         ], false);
-
-        array_push($app->getLog()->targets, [
-            'class' => 'yii\log\FileTarget',
-            'logFile' => $this->runtimePath,
-            'categories' => ['sitemap'],
-            'logVars' => ['error', 'warning'],
-        ]);
     }
 }

@@ -45,10 +45,7 @@ return [
             'class' => 'webivan\sitemap\SitemapModule',
             
             // get action /sitemap.xml
-            'defaultSitemapUrl' => 'sitemap.xml',
-            
-            // Куда сохраняем логи
-            'runtimePath' => '@app/runtime/logs/sitemap.log'
+            'defaultSitemapUrl' => 'sitemap.xml'
         ]
     ],
     
@@ -176,3 +173,26 @@ class SitemapController extends Controller
 ```
 
 и запускайте: `php yii sitemap/index`
+
+Логи
+----
+
+```php 
+<?php
+
+return [
+    'components' => [
+        'log' => [
+            'targets' => [
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'logFile' => '@app/runtime/logs/sitemap.log',
+                    'categories' => ['sitemap'],
+                    'logVars' => ['error', 'warning'],
+                ]
+            ]
+        ]
+    ]
+];
+
+```
