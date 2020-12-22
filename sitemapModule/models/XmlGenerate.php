@@ -148,13 +148,13 @@ class XmlGenerate
     /**
      * Add new record sitemap
      *
-     * @param array $urls
+     * @param ItemUrlConfigure[] $urls
      * @return void
      */
     public function appendTo(array $urls)
     {
         foreach ($urls as $urlObject) {
-            $this->items[] = $urlObject->getAttributes();
+            $this->items[] = $urlObject->accessTags();
 
             if (sizeof($this->items) >= $this->component->maxMapRecords) {
                 $this->createFile();

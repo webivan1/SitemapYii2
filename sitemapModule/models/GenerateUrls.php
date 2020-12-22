@@ -45,7 +45,7 @@ class GenerateUrls
                 if ($container->validate()) {
                     $datas = $container->getDatas();
 
-                    if ($datas->valid()) {
+                    if ($datas instanceof \Generator && $datas->valid()) {
                         foreach ($datas as $data) {
                             yield $data;
                         }
@@ -56,10 +56,17 @@ class GenerateUrls
                 }
 
             } else if (is_callable($item)) {
-                $urlData = call_user_func($item);
+                $urls = call_user_func($item);
 
-                if (!empty($urlData)) {
-                    yield ItemConfigure::createObjectUrls($urlData);
+                if ($urls instanceof \Generator) {
+                    $urls->rewind();
+
+                    while ($urls->valid()) {
+                        yield ItemConfigure::createObjectUrls($urls->current());
+                        $urls->next();
+                    }
+                } else if (!empty($urls)) {
+                    yield ItemConfigure::createObjectUrls($urls);
                 }
             }
         }

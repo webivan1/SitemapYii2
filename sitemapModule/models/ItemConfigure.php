@@ -149,9 +149,9 @@ class ItemConfigure extends Model
      * Validation urls
      *
      * @param array $urls
-     * @return array
+     * @return ItemUrlConfigure[]
      */
-    public static function createObjectUrls(array $urls)
+    public static function createObjectUrls(array $urls): array
     {
         $component = Yii::$app->sitemapComponent;
 

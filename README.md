@@ -1,10 +1,5 @@
 # Ext Sitemap Yii 2
 
-Требования
-----------
-
-Class PHP: `XMLWriter`
-
 Установка
 ---------
 
@@ -43,8 +38,6 @@ return [
         
         'sitemap' => [
             'class' => 'webivan\sitemap\SitemapModule',
-            
-            // get action /sitemap.xml
             'defaultSitemapUrl' => 'sitemap.xml'
         ]
     ],
@@ -64,13 +57,13 @@ return [
             // Ключ для кэширования
             'cacheNameKey' => 'SitemapKeyCache',
             
-            // Приоритет страниц подефолту,
+            // Приоритет страниц по дефолту,
             // можно убрать поставив значение null
             'defaultPriority' => '0.7',
             
             // Домен который будет в sitemap.xml
-            // например http://moovie.pro
-            'domain' => 'http://moovie.pro',
+            // например http://example.com
+            'domain' => 'http://example.com',
             
             // Указывая путь для sitemap файлов,
             // создайте предварительно все папки с правами
@@ -134,18 +127,6 @@ return [
 
 `В консольном конфиге определите алиас @webroot
 если используете путь подефолту`
-
-Например:
-
-```php 
-<?php
-
-return [
-    'aliases' => [
-        '@webroot' => realpath(dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'www')
-    ],
-];
-```
 
 Создайте контроллер для консольных комманд, например
 

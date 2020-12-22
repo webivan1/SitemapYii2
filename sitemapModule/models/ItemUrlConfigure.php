@@ -10,28 +10,34 @@ namespace webivan\sitemap\models;
 
 use Yii;
 use yii\base\Model;
+use GuzzleHttp\Exception\ClientException;
 
 class ItemUrlConfigure extends Model
 {
     /**
-     * @property string
+     * @var string
      */
     public $loc;
 
     /**
-     * @property string date('c')
+     * @var string date('c')
      */
     public $lastmod;
 
     /**
-     * @property string
+     * @var string
      */
     public $changefreq;
 
     /**
-     * @property string
+     * @var string
      */
     public $priority;
+    
+    /**
+     * @var bool
+     */
+    public $checkStatusUrl = false;
 
     /**
      * @inheritdoc
@@ -47,7 +53,48 @@ class ItemUrlConfigure extends Model
                 } else {
                     return $value;
                 }
-            }]
+            }],
+            [['checkStatusUrl'], 'boolean']
         ];
+    }
+
+    public function accessTags(): array
+    {
+        return [
+            'loc' => $this->loc,
+            'lastmod' => $this->lastmod,
+            'changefreq' => $this->changefreq,
+            'priority' => $this->priority
+        ];
+    }
+
+    public function beforeValidate()
+    {
+        if (!parent::beforeValidate()) {
+            return false;
+        }
+
+        if ($this->checkStatusUrl && !$this->isStatusOk()) {
+            $this->addError('checkStatusUrl', 'Page status has been failed');
+        }
+
+        return $this->hasErrors();
+    }
+
+    public function isStatusOk()
+    {
+        $component = Yii::$app->sitemapComponent;
+        $url = $component->domain . $this->loc;
+
+        try {
+            $client = new \GuzzleHttp\Client();
+            $response = $client->request('GET', $url);
+            $statusCode = $response->getStatusCode();
+
+            return $statusCode >= 200 && $statusCode < 300;
+        } catch (ClientException $e) {
+            $this->addError('checkStatusUrl', $e->getMessage());
+            return false;
+        }
     }
 }

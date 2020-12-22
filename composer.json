@@ -1,27 +1,31 @@
 {
-    "name": "yii2-webivan1/yii2-sitemap",
-    "description": "Extension sitemap Yii2",
-    "keywords": ["yii2", "extension"],
-    "type": "yii2-extension",
-    "authors": [
-        {
-            "name": "Ivan Maltsev",
-            "email": "info-babki@yandex.ru"
-        }
-    ],
-    "require": {
-        "yiisoft/yii2": "*",
-        "yii2-webivan1/yii2-sitemap": "dev-master"
-    },
-    "autoload": {
-        "psr-4": {
-            "webivan\\sitemap\\": "sitemapModule"
-        }
-    },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/webivan1/SitemapYii2.git"
-        }
-    ]
+  "name": "yii2-webivan1/yii2-sitemap",
+  "description": "Extension sitemap Yii2",
+  "keywords": [
+    "yii2",
+    "extension"
+  ],
+  "type": "yii2-extension",
+  "authors": [
+    {
+      "name": "Ivan Maltsev",
+      "email": "ivan.maltsev.php@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "yiisoft/yii2": "~2.0.14",
+    "guzzlehttp/guzzle": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "webivan\\sitemap\\": "sitemapModule"
+    }
+  },
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/webivan1/SitemapYii2.git"
+    }
+  ]
 }

@@ -15,7 +15,7 @@ use yii\base\BootstrapInterface;
 class SitemapModule extends Module implements BootstrapInterface
 {
     /**
-     * @property string
+     * @var string
      */
     public $defaultSitemapUrl = 'sitemap.xml';
 

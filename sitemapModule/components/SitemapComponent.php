@@ -145,7 +145,7 @@ class SitemapComponent extends Component
 
                 $result = $models->run();
 
-                if ($result->valid()) {
+                if ($result instanceof \Generator && $result->valid()) {
                     foreach ($result as $urls) {
                         $xmlModel->appendTo($urls);
                     }
