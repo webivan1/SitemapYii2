@@ -10,7 +10,6 @@ namespace webivan\sitemap\models;
 
 use Yii;
 use yii\base\Model;
-use GuzzleHttp\Exception\ClientException;
 
 class ItemUrlConfigure extends Model
 {
@@ -83,16 +82,13 @@ class ItemUrlConfigure extends Model
 
     public function isStatusOk()
     {
-        $component = Yii::$app->sitemapComponent;
-        $url = $component->domain . $this->loc;
-
         try {
             $client = new \GuzzleHttp\Client();
-            $response = $client->request('GET', $url);
+            $response = $client->request('GET', $this->loc);
             $statusCode = $response->getStatusCode();
 
             return $statusCode >= 200 && $statusCode < 300;
-        } catch (ClientException $e) {
+        } catch (\Exception $e) {
             $this->addError('checkStatusUrl', $e->getMessage());
             return false;
         }
