@@ -77,7 +77,7 @@ class ItemUrlConfigure extends Model
             $this->addError('checkStatusUrl', 'Page status has been failed');
         }
 
-        return $this->hasErrors();
+        return true;
     }
 
     public function isStatusOk()
