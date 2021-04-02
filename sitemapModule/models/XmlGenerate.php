@@ -95,6 +95,9 @@ class XmlGenerate
             fclose($fs);
 
             @chmod($fullPathFile, 0777);
+        } else {
+            self::$docPrefixName++;
+            $this->openDocument();
         }
 
         $this->xml->openURI($fullPathFile);
@@ -123,6 +126,8 @@ class XmlGenerate
         if (empty($this->items)) {
             return false;
         }
+
+        self::$docPrefixName += 1;
 
         $this->openDocument();
 
@@ -158,7 +163,6 @@ class XmlGenerate
 
             if (sizeof($this->items) >= $this->component->maxMapRecords) {
                 $this->createFile();
-                self::$docPrefixName++;
             }
         }
     }

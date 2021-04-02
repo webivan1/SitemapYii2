@@ -36,8 +36,7 @@ class GenerateUrls
      */
     public function run()
     {
-        foreach ($this->models as $item)
-        {
+        foreach ($this->models as $item) {
             if (is_array($item)) {
                 $container = new ItemConfigure();
                 $container->setAttributes($item);
