@@ -211,7 +211,7 @@ class XmlGenerate
             }
         }
         foreach ($this->files as $file){
-            rename($file,str_replace($this->component->tempDir,$this->component->pathSitemapFiles,$file));
+            copy($file,str_replace($this->component->tempDir,$this->component->pathSitemapFiles,$file));
         }
 
     }
