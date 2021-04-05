@@ -204,14 +204,16 @@ class XmlGenerate
      */
     public function moveTemp()
     {
-        $files = glob($this->component->pathSitemapFiles . '/*.xml');
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
+        if($this->files) {
+            $files = glob($this->component->pathSitemapFiles . '/*.xml');
+            foreach ($files as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
             }
-        }
-        foreach ($this->files as $file){
-            copy($file,str_replace($this->component->tempDir,$this->component->pathSitemapFiles,$file));
+            foreach ($this->files as $file) {
+                copy($file, str_replace($this->component->tempDir, $this->component->pathSitemapFiles, $file));
+            }
         }
 
     }
