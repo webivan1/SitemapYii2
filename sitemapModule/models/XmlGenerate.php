@@ -50,7 +50,9 @@ class XmlGenerate
 
         $this->xml = new \XMLWriter();
 
-        $this->files = glob($this->component->pathSitemapFiles . '/*.xml');
+        $this->files = $this->component->tempDir
+            ? glob($this->component->tempDir . '/*.xml')
+            : glob($this->component->pathSitemapFiles . '/*.xml');
 
         if (!empty($this->files) && $clearAll === true) {
             $this->deleteAll();
@@ -84,7 +86,7 @@ class XmlGenerate
      */
     private function openDocument()
     {
-        $fullPathFile = $this->component->pathSitemapFiles
+        $fullPathFile = ($this->component->tempDir ? $this->component->tempDir : $this->component->pathSitemapFiles)
             . '/'
             . $this->component->baseNameFile
             . (self::$docPrefixName >= 1 ? self::$docPrefixName : null)
@@ -195,5 +197,22 @@ class XmlGenerate
         $this->xml->endDocument();
 
         return $this->xml->outputMemory();
+    }
+
+    /**
+     *  Move files from temp directory
+     */
+    public function moveTemp()
+    {
+        $files = glob($this->component->pathSitemapFiles . '/*.xml');
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+        foreach ($this->files as $file){
+            rename($file,str_replace($this->component->tempDir,$this->component->pathSitemapFiles,$file));
+        }
+
     }
 }

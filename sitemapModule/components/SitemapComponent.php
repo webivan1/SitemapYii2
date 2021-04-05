@@ -78,6 +78,11 @@ class SitemapComponent extends Component
     public $generateSitemapsByUrl = true;
 
     /**
+     * @property string | bool
+     */
+    public $tempDir = false;
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -95,6 +100,21 @@ class SitemapComponent extends Component
             }
         } catch (\Exception $e) {
             throw new \yii\base\Exception('Create path: ' . $this->pathSitemapFiles);
+        }
+
+        if($this->tempDir){
+            if (strpos($this->tempDir, '@') === 0) {
+                $this->tempDir = Yii::getAlias($this->tempDir);
+            }
+
+            try {
+                if (!is_dir($this->tempDir)) {
+                    mkdir($this->tempDir, 0777);
+                    chmod($this->tempDir, 0777);
+                }
+            } catch (\Exception $e) {
+                throw new \yii\base\Exception('Create path: ' . $this->tempDir);
+            }
         }
     }
 
@@ -153,6 +173,10 @@ class SitemapComponent extends Component
             }
 
             $xmlModel->createFile();
+
+            if($this->tempDir){
+                $xmlModel->moveTemp();
+            }
 
             return true;
 
