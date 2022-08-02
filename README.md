@@ -1,3 +1,6 @@
+❗Deprecated
+------
+
 # Ext Sitemap Yii 2
 
 Установка
